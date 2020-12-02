@@ -1,0 +1,32 @@
+<html>
+<head>
+    <link href="/public/assets/register.css" rel="stylesheet" type="text/css" />
+    <title>Register</title>
+</head>
+<body>
+    <form action="/register" method="POST">
+        <div class="hoveddiv">
+            <h1>Register</h1>
+            <div>
+                <p>Name</p>
+                <label for="name"></label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <p>Email</p>
+                <label for="email"></label>
+                <input type="text" id="email" name="email" required>
+            </div>
+            <div>
+                <p>Password</p>
+                <label for="password"></label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <br>
+            <button type="submit">Register</button>
+            <br>
+            <a href="/login">Already have an account? Log In!</a>
+        </div>
+    </form>
+</body>
+</html>
