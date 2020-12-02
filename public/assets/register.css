@@ -1,5 +1,8 @@
 body{
-    background-color: lightblue;
+    background: rgb(255,0,0);
+    margin: 0;
+    padding: 0;
+    text-align: center;
 }
 .hoveddiv{
     padding: 5px;

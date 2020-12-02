@@ -4,21 +4,34 @@
     <title>Login</title>
 </head>
 <body>
-    <h1>Login</h1>
-<% if (messages.error) { %>
-    <%= messages.error %>
-<% } %>
-<form action="/login" method="POST">
-    <div>
-        <label for="email">Email</label>
-        <input type="text" id="email" name="email" required>
-    </div>
-    <div>
-        <label for="password">Password</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <button type="submit">Login</button>
-</form>
-<a href="/register">Register</a>
+    <header>
+        <div style="width: 100%; background-color: beige; height: 100px;">
+            <div style="height: 100px;"><img src="/public/cssimages/logo.png" alt="logo" style="max-height: 100px;"></div>
+        </div>
+    </header>
+    <section>
+        <div class="hoveddiv">
+            <h1>Login</h1>
+            <% if (messages.error) { %>
+                <%= messages.error %>
+            <% } %>
+            <form action="/login" method="POST">
+                <div>
+                    <p>Email</p>
+                    <label for="email"></label>
+                    <input type="text" id="email" name="email" required>
+                </div>
+                <div>
+                    <p>Password</p>
+                    <label for="password"></label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+            <br>
+            <button type="submit">Login</button>
+            <br>
+            <a href="/register">Don't have an account yet? Register!</a>
+        </div>
+    </section>
+    
 </body>
 </html>
