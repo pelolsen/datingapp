@@ -1,0 +1,48 @@
+Descrição da tarefa
+Você acaba de ser contratado em uma startup que criará um concorrente para o Tinder. 
+Portanto, eles pediram que você projetasse e implementasse uma primeira edição de um aplicativo de namoro. 
+O aplicativo em si deve ser muito semelhante ao Tinder, mas há esperanças de, a longo prazo, ser capaz de melhorar o próprio algoritmo de correspondência e, assim, criar uma vantagem competitiva.
+Os usuários não terão que pagar pelo uso do Aplicativo, mas novos recursos serão criados posteriormente, o que poderia funcionar com microtransações.
+Seu gerente de projeto pediu que você criasse um MVP (Produto Mínimo Viável), que pode provar aos investidores que vale a pena investir na ideia de negócio. 
+Portanto, você deve desenvolver um aplicativo em Node.JS, que usa a estrutura MVC como uma estrutura geral. O aplicativo deve ser orientado a objetos e deve ter um front end pelo qual os usuários navegem. 
+Isso significa que você deve desenvolver três partes:
+- Armazenamento
+- API
+- A parte dianteira
+Os requisitos para essas peças individuais são declarados em Requisitos técnicos para a resposta.
+Especificação de requisitos funcionais:
+O aplicativo deve permitir que um usuário crie um perfil
+2. O aplicativo deve permitir que um usuário exclua seu próprio perfil
+O aplicativo deve permitir que um usuário atualize seu próprio perfil
+4. O aplicativo deve permitir que o usuário faça login
+O aplicativo deve permitir que se um usuário estiver conectado, ele possa
+permaneça logado.
+6. O aplicativo deve permitir que um usuário selecione como ou
+não gosto de um perfil sugerido
+7. O aplicativo deve fornecer ao usuário uma notificação se ambos
+     perfis gostaram um do outro
+8. O aplicativo deve permitir que um usuário saia
+9. O aplicativo deve ser capaz de exibir uma lista de correspondências do usuário atual
+10. O aplicativo deve mostrar apenas um perfil completo para uma possível correspondência. 11. O aplicativo deve dar ao usuário a oportunidade de remover uma correspondência novamente
+
+Requisitos técnicos para a resposta
+Você deve preparar três partes para o seu sistema, que seguirá o modelo de três camadas.
+1. Frontend (JS, HTML, CSS)
+2. Servidor / API (Node.JS e Express)
+3. Armazenamento (armazenamento de arquivo simples e armazenamento local (armazenamento local é
+     conectado com o front-end))
+As três partes devem estar conectadas e separar os dados, o que permitirá ao usuário interagir com os clientes, que enviam uma solicitação ao servidor, que por fim recupera ou atualiza os dados no banco de dados.
+
+ 1 - Clientes
+Você tem a opção de criar um cliente que usa uma das muitas estruturas front-end disponíveis para Node.JS, ou pode criar seu cliente em HTML e CSS simples. Não fazemos exigências sobre isso, mas esperamos que você justifique sua escolha e apresente argumentos para isso.
+Não gastamos recursos na avaliação de sua interface de usuário em termos de usabilidade e aparência gráfica, por isso você não deve gastar muito tempo nesta parte.
+
+2 - O servidor
+Você deve preparar o servidor em Node.JS com Express como middleware. O trabalho é desenvolver uma API que possa ser usada em conexão com seu cliente. A principal função da API é conectar o cliente e o banco de dados e, assim, ser um backend entre os dois. Isso significa que você deve construir um aplicativo baseado em MVC.
+O aplicativo exibe uma interface HTTP que pode responder às solicitações HTTP e enviar respostas de volta. O formato de troca de dados deve ser JSON ou XML, mas definitivamente recomendamos que você seja JSON.
+Você deve colocar ênfase na construção de uma camada de modelo bem pensada, que forma a base de seu aplicativo. Além disso, você deve seguir as boas práticas normais de código e documentar seu código com comentários e uma estrutura de arquivo sensata. O código deve ser fácil de manter para os outros após a entrega e, é claro, o código deve ser versionado usando Git.
+
+3 - Armazenamento
+Para atender aos requisitos do projeto, é necessário salvar alguns dados. Entre outras coisas, você deve salvar algumas páginas do cliente de dados (por exemplo, status de login), isso deve ser feito no armazenamento local. Você também deve salvar a página do servidor de dados, como. Informação do Perfil. Isso pode ser feito em arquivos json avulsos.
+
+As escolhas que você faz para armazenamento devem ser documentadas em seu relatório. Isso inclui, por exemplo a estrutura json escolhida - ou seja, como você escolheu estruturar seus dados.

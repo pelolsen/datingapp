@@ -1,7 +1,10 @@
 if (process.env.Node_ENV !== 'production') {
     require('dotenv').config()
 }
-
+if (typeof localStorage === "undefined" || localStorage === null) {
+    var LocalStorage = require('node-localstorage').LocalStorage;
+    localStorage = new LocalStorage('./database');
+}
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt')
@@ -12,14 +15,15 @@ const methodOverride = require("method-override")
 const fs = require('fs')
 
 
-const initializePassport = require("./passport-config")
+const initializePassport = require("./passport-config");
+const { use } = require('passport');
 initializePassport(
     passport, 
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
 )
 
-
+const users_json_obj = []
 const users = []
 
 app.set("view-engine", "ejs")
@@ -77,34 +81,48 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
         res.redirect("/register")
     }
     //if there is user that is added, it is possible to see ind the console
-    console.log(users)
-    if (typeof localStorage === "undefined" || localStorage === null) {
-        var LocalStorage = require('node-localstorage').LocalStorage;
-        localStorage = new LocalStorage('./database');
-      }
+    //console.log(users)
+
                 
       //aqui salva o json em forma de string no nosso "localStorage"
       localStorage.setItem('users',JSON.stringify(users));
-      console.log(localStorage.getItem('users'));
+      //console.log(localStorage.getItem('users'));
   
       //pega os usuarios que é um json string e transforma de volta em array para ser manipulado
-      users_json_obj = JSON.parse(localStorage.getItem('users'));
-      console.log(users_json_obj);
+      users_json_obj.push(JSON.parse(localStorage.getItem('users')));
+      //console.log(users_json_obj)
+      //console.log(users_json_obj[0]['id'])
 })
 
-app.delete('/logout', (req,res) => {
+app.delete('/logout', async (req,res) => {
     req.logOut()
     res.redirect('/login')
 })
-app.delete('/deleteuser', (req,res) => {
-    for(i=0; i<users_json_obj.length; i++){
-        if(users_json_obj[i][0] === id){
-            users_json_obj.splice(i,1);
-            return users_json_obj
+app.post('/deleteuser', (req,res) => {
+    try{
+        const id1=req.user.id
+        const usersfind = JSON.parse(localStorage.getItem('users'));
+        const findUserid = (usersfind, id1) =>{
+            for(i=0; i < usersfind.length; i++){
+                if(usersfind[i]['id'] === id1){
+                    usersfind.splice(i,1);
+                    console.log(usersfind)
+                    return usersfind
+                }
+            }
         }
+        users.splice(0, users.length)
+        users.push(findUserid(usersfind, id1))
+        req.logOut()
+        res.redirect("/login")
+
+    }catch{
+        res.redirect("/register")
     }
-    console.log(users_json_obj);
-    res.redirect('/login')
+    localStorage.clear();
+    localStorage.setItem('users',JSON.stringify(users));
+    console.log(localStorage.getItem('users'));
+    
 })
 
 function checkAuthenticated(req, res, next){
