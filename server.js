@@ -44,7 +44,11 @@ app.use(passport.session())
 app.use(methodOverride('_method'))
 
 app.get("/", checkAuthenticated, (req,res)=> {
-    res.render("index.ejs", { name: req.user.name})
+    res.render("index.ejs", { name: req.user.name, age: req.user.age})
+})
+
+app.get("/match", checkAuthenticated, (req,res) =>{
+    res.render("match.ejs")
 })
 
 app.get("/login", checkNotAuthenticated, (req, res) => {
@@ -69,6 +73,7 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
         const person ={
             id: Date.now().toString(),
             name: req.body.name,
+            age: req.body.age,
             email: req.body.email,
             password: hashedPassword
         }
@@ -112,7 +117,7 @@ app.post('/deleteuser', (req,res) => {
             }
         }
         users.splice(0, users.length)
-        users.push(findUserid(usersfind, id1))
+        users.push(...findUserid(usersfind,id1))
         req.logOut()
         res.redirect("/login")
 

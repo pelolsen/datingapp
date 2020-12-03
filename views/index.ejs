@@ -4,27 +4,28 @@
     <title>Login</title>
 </head>
 <body>
-    <header>
+    <header style="padding-bottom: 20px;">
         <div style="width: 100%; background-color: beige; height: 100px;">
             <div style="height: 100px;"><img src="/public/cssimages/logo.png" alt="logo" style="max-height: 100px;"></div>
+            <div style="float: right;">
+                <div style="float: left;">
+                    <form action="/logout?_method=DELETE" method="POST">
+                        <button type="submit">Log Out</button>
+                    </form>
+                </div>
+                <div style="float: left;">
+                    <form action="/deleteuser" method="POST">
+                        <button type="submit">Delete My User</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </header>
     <section>
         <div>
-            <h1>Hi <%= name %></h1>
+            <h1>Hi <%= name %>, <%= age %> </h1>
         </div>
-        <div>
-            <div style="float: left;">
-                <form action="/logout?_method=DELETE" method="POST">
-                    <button type="submit">Log Out</button>
-                </form>
-            </div>
-            <div style="float: left;">
-                <form action="/deleteuser" method="POST">
-                    <button type="submit">Delete My User</button>
-                </form>
-            </div>
-        </div>
+        <a href="/match">Let's find your match!</a>
     </section>
     
 </body>
