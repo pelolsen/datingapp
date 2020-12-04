@@ -7,7 +7,18 @@
     <header style="padding-bottom: 20px;">
         <div style="width: 100%; background-color: beige; height: 100px;">
             <div style="height: 100px;"><img src="/public/cssimages/logo.png" alt="logo" style="max-height: 100px;"></div>
-            <div style="float: right;">
+        </div>
+    </header>
+    <section>
+        <div style="border: 1px solid #616161; text-align: center; position: relative; width: 50%; display: inline-block;">
+            <h1>Welcome <%= name %>!<%= picture %></h1>
+            <div style="height: 200px; width: 200px; display: inline-block;">
+                <img src="<%= picture %>" alt="pic" style="max-width: 100%; border-radius: 25px;">
+            </div><br>
+            <h3 style="display: inline-block;">Age: </h3><p style="display: inline-block;"><%= age %></p><br>
+            <h3 style="display: inline-block;">Gender: </h3><p style="display: inline-block;"> <%= gender %></p><br>
+            <a href="/match">Let's find your match!</a><br><br>
+            <div style="display: inline-block;">
                 <div style="float: left;">
                     <form action="/logout?_method=DELETE" method="POST">
                         <button type="submit">Log Out</button>
@@ -20,12 +31,7 @@
                 </div>
             </div>
         </div>
-    </header>
-    <section>
-        <div>
-            <h1>Hi <%= name %>, <%= age %>,<%= gender %>  </h1>
-        </div>
-        <a href="/match">Let's find your match!</a>
+        
     </section>
     
 </body>

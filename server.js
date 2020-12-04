@@ -12,7 +12,20 @@ const passport = require("passport")
 const flash = require("express-flash")
 const sessions = require("express-session")
 const methodOverride = require("method-override")
+const http = require("http")
+const formidable = require("formidable")
 const fs = require('fs')
+const multer = require('multer')
+const path = require("path")
+
+const storage = multer.diskStorage({
+    destination: "./public/uploads/",
+    filename: function(req, file, cb){
+        cb(null, file.originalname)
+    }
+
+})
+const upload = multer({storage: storage}).single('UserFile');
 
 
 const initializePassport = require("./passport-config");
@@ -44,7 +57,7 @@ app.use(passport.session())
 app.use(methodOverride('_method'))
 
 app.get("/", checkAuthenticated, (req,res)=> {
-    res.render("index.ejs", { name: req.user.name, age: req.user.age, gender: req.user.genderick09})
+    res.render("index.ejs", { name: req.user.name, age: req.user.age, gender: req.user.gender, picture: req.user.picture})
 })
 
 app.get("/match", checkAuthenticated, (req,res) =>{
@@ -61,6 +74,20 @@ app.post("/login", checkNotAuthenticated,  passport.authenticate('local', {
     failureFlash: true
 }))
 
+app.get("/try", checkNotAuthenticated, (req,res)=> {
+    res.render("try.ejs")
+})
+
+app.post("/try", (req,res) =>{
+    upload(req, res, (err) =>{
+        if(err){
+            res.redirect('/register')
+        }else{
+            console.log(req.file);
+            res.send('test')
+        }
+    })
+})
 
 app.get("/register", checkNotAuthenticated, (req,res)=> {
     res.render("register.ejs")
@@ -75,10 +102,28 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
             name: req.body.name,
             age: req.body.age,
             gender: req.body.gender,
+            picture: './public/uploads/'+req.body.UserFile,
             email: req.body.email,
             password: hashedPassword
         }
         users.push(person)
+        /*
+        console.log('0');
+        const form = formidable();
+        console.log(form);
+        form.parse(req, function (err, fields, files) {
+            console.log('1')
+            var oldpath = files.filetoupload.path;
+            var newpath = 'database/images/'+files.filetoupload.name;
+            fs.rename(oldpath, newpath, function (err) {
+                if (err) throw err;
+                res.write('File uploaded and moved!');
+                res.end();
+            });
+        });
+        console.log(form);
+        */
+
         //if all the above is right, than redirect the user to login page
         res.redirect("/login")
         
@@ -88,7 +133,6 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
     }
     //if there is user that is added, it is possible to see ind the console
     //console.log(users)
-
                 
       //aqui salva o json em forma de string no nosso "localStorage"
       localStorage.setItem('users',JSON.stringify(users));
