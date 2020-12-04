@@ -44,7 +44,7 @@ app.use(passport.session())
 app.use(methodOverride('_method'))
 
 app.get("/", checkAuthenticated, (req,res)=> {
-    res.render("index.ejs", { name: req.user.name, age: req.user.age})
+    res.render("index.ejs", { name: req.user.name, age: req.user.age, gender: req.user.genderick09})
 })
 
 app.get("/match", checkAuthenticated, (req,res) =>{
@@ -74,6 +74,7 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
             id: Date.now().toString(),
             name: req.body.name,
             age: req.body.age,
+            gender: req.body.gender,
             email: req.body.email,
             password: hashedPassword
         }
