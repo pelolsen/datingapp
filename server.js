@@ -32,9 +32,8 @@ initializePassport(
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
 )
-
+const users =[]
 const users_json_obj = []
-const users = []
 
 app.set("view-engine", "ejs")
 
@@ -85,7 +84,9 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
             gender: req.body.gender,
             picture: './public/uploads/',
             email: req.body.email,
-            password: hashedPassword
+            password: hashedPassword,
+            possibilities: [],
+            likes: []
         }
         users.push(person)
    
@@ -192,6 +193,39 @@ app.post("/updateprofile", checkAuthenticated, (req,res) =>{
     }
 })
 
+app.post('/match', checkAuthenticated, (req,res) =>{
+    try{
+        const id1=req.user.id
+        const usergender = req.user.gender
+        const possibilities = req.user.possibilities
+        const usersfind = JSON.parse(localStorage.getItem('users'));
+        const findUserposibilities = (usersfind, id1) =>{
+            for(i=0; i < usersfind.length; i++){
+                if(usersfind[i]['id'] !== id1 && usersfind[i]['gender'] !== usergender){
+                    possibilities.push(usersfind[i]['id']);
+                }
+            }
+        }
+        findUserposibilities(usersfind,id1)
+        console.log(users)
+        res.redirect('/match')
+    }catch{
+
+    }
+})
+
+app.post('/like', checkAuthenticated, (req,res) => {
+    try{
+        const userlike = req.user.likes
+        console.log('1' + userlike);
+        userlike.push('testando')
+        console.log('2' + userlike)
+        console.log(users)
+        res.redirect('/match')
+    } catch{
+        res.redirect('/')
+    }
+})
 
 app.delete('/logout', async (req,res) => {
     req.logOut()
