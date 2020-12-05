@@ -4,3 +4,11 @@ body{
     padding: 0;
     text-align: center;
 }
+
+.matchesdiv{
+    width: 35%;
+    height: 500px;
+    border: 1px solid black ;
+    display: inline-block;
+    background-color: white;
+}

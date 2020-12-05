@@ -1,0 +1,50 @@
+<html>
+<head>
+    <link href="/public/assets/register.css" rel="stylesheet" type="text/css" />
+    <title>Register</title>
+</head>
+<body>
+    <header>
+        <div style="width: 100%; background-color: beige; height: 100px;">
+            <div style="height: 100px;"><img src="/public/cssimages/logo.png" alt="logo" style="max-height: 100px;"></div>
+        </div>
+    </header>
+    <section>
+        <form action="/updateprofile" method="POST">
+            <div class="hoveddiv">
+                <h1>Update your profile</h1>
+                <div>
+                    <p>Name</p>
+                    <label for="name"></label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div>
+                    <p>Age</p>
+                    <label for="age"></label>
+                    <input type="text" id="age" name="age" required>
+                </div>
+                <div>
+                    <p>Gender</p>
+                    <input type="radio" id="male" name="gender" value="male">
+                    <label for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">Female</label>
+                </div>
+                <div>
+                    <p>Email</p>
+                    <label for="email"></label>
+                    <input type="text" id="email" name="email" required>
+                </div>
+                <br>
+                <p>Please fill all the above before updating</p>
+                <br>
+                <button type="submit">Update</button>
+                <br>
+                <a href="/">Don't Update</a>
+            </div>
+        </form>
+    </section>
+		
+</body>
+
+</html>

@@ -60,11 +60,11 @@ app.get("/match", checkAuthenticated, (req,res) =>{
 app.get("/login", checkNotAuthenticated, (req, res) => {
     res.render("login.ejs")
 })
-app.get("/pictureuptade", checkAuthenticated, (req,res)=> {
-    res.render("pictureuptade.ejs")
-})
 app.get("/register", checkNotAuthenticated, (req,res)=> {
     res.render("register.ejs")
+})
+app.get("/updateprofile", checkAuthenticated, (req,res)=> {
+    res.render("updateprofile.ejs")
 })
 
 
@@ -135,7 +135,7 @@ app.post("/pictureuptade", checkAuthenticated, (req,res) =>{
             }
         })
     } catch {
-        res.redirect('/pictureuptade')
+        res.redirect('/')
     }
 })
 
@@ -165,6 +165,33 @@ app.post('/deleteuser', (req,res) => {
     console.log(localStorage.getItem('users'));
     
 })
+
+app.post("/updateprofile", checkAuthenticated, (req,res) =>{
+    try{
+        const id1=req.user.id
+        const usersfind = JSON.parse(localStorage.getItem('users'));
+        const findUserid = (usersfind, id1) =>{
+            for(i=0; i < usersfind.length; i++){
+                if(usersfind[i]['id'] === id1){
+                    usersfind[i]['name'] = req.body.name;
+                    usersfind[i]['age'] = req.body.age;
+                    usersfind[i]['gender'] = req.body.gender;
+                    usersfind[i]['email'] = req.body.email;
+                    return usersfind
+                }
+            }
+        }
+        users.splice(0, users.length)
+        users.push(...findUserid(usersfind,id1))
+        localStorage.clear();
+        localStorage.setItem('users',JSON.stringify(users));
+
+        res.redirect('/')
+    } catch {
+        res.redirect('/')
+    }
+})
+
 
 app.delete('/logout', async (req,res) => {
     req.logOut()

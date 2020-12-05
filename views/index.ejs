@@ -10,17 +10,24 @@
         </div>
     </header>
     <section>
-        <div style="border: 1px solid #616161; text-align: center; position: relative; width: 50%; display: inline-block;">
-            <h1>Welcome <%= name %>!<%= picture %></h1>
+        <div style="border: 1px solid #616161; text-align: center; position: relative; width: 50%; display: inline-block; background-color: white;">
+            <h1>Welcome <%= name %>!</h1>
             <div style="height: 200px; width: 200px; display: inline-block;">
-                <img src="<%= picture %>" alt="pic" style="max-width: 100%; border-radius: 25px;">
+                <img src="<%= picture %>" alt="You have no profile picture, please add one in 'Uptade your profile picture'" style="max-width: 100%; border-radius: 25px;">
             </div><br>
             <div style="display: inline-block;">
-                <a href="/pictureuptade">Add a pic</a>
+                <form action="/pictureuptade" enctype="multipart/form-data" method="POST">
+                    <div>
+                        <p>Update your profile picture</p>
+                        <input type="file" name="UserFile" required>
+                    </div>
+                    <button type="submit">Update</button>
+                </form>
             </div><br>
             <h3 style="display: inline-block;">Age: </h3><p style="display: inline-block;"><%= age %></p><br>
             <h3 style="display: inline-block;">Gender: </h3><p style="display: inline-block;"> <%= gender %></p><br>
             <a href="/match">Let's find your match!</a><br><br>
+            <a href="/updateprofile">Update Profile</a><br><br>
             <div style="display: inline-block;">
                 <div style="float: left;">
                     <form action="/logout?_method=DELETE" method="POST">
