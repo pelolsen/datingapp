@@ -201,7 +201,7 @@ app.post('/match', checkAuthenticated, (req,res) =>{
         const usersfind = JSON.parse(localStorage.getItem('users'));
         const findUserposibilities = (usersfind, id1) =>{
             for(i=0; i < usersfind.length; i++){
-                if(usersfind[i]['id'] !== id1 && usersfind[i]['gender'] !== usergender){
+                if(usersfind[i]['id'] !== id1 && usersfind[i]['gender'] !== usergender && !possibilities.includes(userfind[i]['id'])){
                     possibilities.push(usersfind[i]['id']);
                 }
             }
