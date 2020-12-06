@@ -110,6 +110,7 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
       //console.log(users_json_obj[0]['id'])
 })
 
+//This is the post command for making the user uptade it's profile picture
 app.post("/pictureuptade", checkAuthenticated, (req,res) =>{
     try{
         upload(req, res, (err) =>{
@@ -119,7 +120,7 @@ app.post("/pictureuptade", checkAuthenticated, (req,res) =>{
                 console.log(req.file);
                 const id1=req.user.id
                 const usersfind = JSON.parse(localStorage.getItem('users'));
-                const findUserid = (usersfind, id1) =>{
+                const switchUserpic = (usersfind, id1) =>{
                     for(i=0; i < usersfind.length; i++){
                         if(usersfind[i]['id'] === id1){
                             usersfind[i]['picture'] = './public/uploads/' + req.file.filename;
@@ -128,7 +129,7 @@ app.post("/pictureuptade", checkAuthenticated, (req,res) =>{
                     }
                 }
                 users.splice(0, users.length)
-                users.push(...findUserid(usersfind,id1))
+                users.push(...switchUserpic(usersfind,id1))
                 localStorage.clear();
                 localStorage.setItem('users',JSON.stringify(users));
         
@@ -171,7 +172,7 @@ app.post("/updateprofile", checkAuthenticated, (req,res) =>{
     try{
         const id1=req.user.id
         const usersfind = JSON.parse(localStorage.getItem('users'));
-        const findUserid = (usersfind, id1) =>{
+        const UptadeUser = (usersfind, id1) =>{
             for(i=0; i < usersfind.length; i++){
                 if(usersfind[i]['id'] === id1){
                     usersfind[i]['name'] = req.body.name;
@@ -183,7 +184,7 @@ app.post("/updateprofile", checkAuthenticated, (req,res) =>{
             }
         }
         users.splice(0, users.length)
-        users.push(...findUserid(usersfind,id1))
+        users.push(...UptadeUser(usersfind,id1))
         localStorage.clear();
         localStorage.setItem('users',JSON.stringify(users));
 
@@ -209,6 +210,8 @@ app.post('/match', checkAuthenticated, (req,res) =>{
         }
         findUserposibilities(usersfind,id1)
         console.log(users)
+        localStorage.clear();
+        localStorage.setItem('users',JSON.stringify(users));
 
         res.redirect('/match')
     }catch{
