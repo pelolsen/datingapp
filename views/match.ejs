@@ -21,13 +21,17 @@
     <section>
         <h1> Aqui vem as possibilidades </h1>
         <div class = "matchesdiv">
-            <div style="border: 1px solid black; width: 50%; height: 400px; display: inline-block;"><img src="" alt="pic" style="max-width: 100%; border-radius: 25px;"></div>
-            <h3 style="padding: 0; margin: 10px;">,</h3>
+            <div style="border: 1px solid black; width: 50%; height: 400px; display: inline-block;"><img src="<%= picture  %>" alt="pic" style="max-width: 100%; border-radius: 25px;"></div>
+            <h3 style="padding: 0; margin: 10px;"><%= name  %>, <%= age %></h3>
             <div>
                 <form action="/like" method="POST">
+                    <input type="hidden" name="id" value="<%= id  %>">
                     <div style="float: left; padding-left: 150px;"><button>Like</button></div>
                 </form>
-                <div style="float: right; padding-right: 150px;"><button>Dislike</button></div>
+                <form action="/dislike" method="POST">
+                    <input type="hidden" name="id" value="<%= id  %>">
+                    <div style="float: right; padding-right: 150px;"><button>Dislike</button></div>
+                </form>
             </div>
         </div>
     </section>
