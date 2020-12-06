@@ -203,11 +203,13 @@ app.post('/match', checkAuthenticated, (req,res) =>{
             for(i=0; i < usersfind.length; i++){
                 if(usersfind[i]['id'] !== id1 && usersfind[i]['gender'] !== usergender && !possibilities.includes(userfind[i]['id'])){
                     possibilities.push(usersfind[i]['id']);
+                    break
                 }
             }
         }
         findUserposibilities(usersfind,id1)
         console.log(users)
+
         res.redirect('/match')
     }catch{
 
