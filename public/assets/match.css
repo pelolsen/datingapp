@@ -12,3 +12,11 @@ body{
     display: inline-block;
     background-color: white;
 }
+.likebtn{
+    background-color: #00ff40;
+    color: white;
+}
+.dislikebtn{
+    background-color: red;
+    color: white;
+}

@@ -103,7 +103,7 @@ app.get("/match", checkAuthenticated, (req,res) =>{
         localStorage.setItem('users',JSON.stringify(users));
 
     }catch{   
-
+        res.redirect('/')
     }    
 })
 
@@ -338,9 +338,7 @@ app.post('/dislike', checkAuthenticated, (req,res) => {
     }
 })
 
-app.post('/noti', (req,res) => {
-    app.alert('vai toma no cu')
-})
+
 app.delete('/logout', async (req,res) => {
     req.logOut()
     res.redirect('/login')
