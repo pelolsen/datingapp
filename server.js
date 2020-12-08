@@ -338,7 +338,6 @@ app.post('/dislike', checkAuthenticated, (req,res) => {
     }
 })
 
-
 app.delete('/logout', async (req,res) => {
     req.logOut()
     res.redirect('/login')
