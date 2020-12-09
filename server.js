@@ -110,6 +110,9 @@ app.get("/match", checkAuthenticated, (req,res) =>{
 app.get("/login", checkNotAuthenticated, (req, res) => {
     res.render("login.ejs")
 })
+app.get('/itsamatch', checkAuthenticated, (req,res)=>{
+    res.render("itsamatch.ejs")
+})
 app.get("/register", checkNotAuthenticated, (req,res)=> {
     res.render("register.ejs")
 })
@@ -257,6 +260,7 @@ function test_match(usersfind, id1, liked_id, matches){
             if(usersfind[i]['likes'].includes(id1)){
                 console.log('match');
                 matches.push(usersfind[i]['name']);
+                return true
             }
         }
     }
@@ -283,19 +287,19 @@ app.post('/like', checkAuthenticated, (req,res) => {
 
 
         //aqui vc iniciara uma funcao que fara o teste de Match!
-        test_match(usersfind, id1, liked_id, matches);
+       if(test_match(usersfind, id1, liked_id, matches)){
+           res.render('itsamatch.ejs')
+       } else{
+            //Aqui recomeçamos o processo de trazer a lista de usuarios
+            //procura 1 usuario
+            user_find = findUserposibilities(possibilities,usersfind,id1,usergender);
+            //renderiza a tela com o usuario encontrado
+            console.log('console log antes do render');  
+            res.render("match.ejs", {id: user_find.id,name: user_find.name,picture: user_find.picture, age: user_find.age});
+            console.log('console log depois do render');
+       }
         console.log(users)
         
-
-        //Aqui recomeçamos o processo de trazer a lista de usuarios
-        //procura 1 usuario
-        user_find = findUserposibilities(possibilities,usersfind,id1,usergender);
-        //renderiza a tela com o usuario encontrado
-        
-        console.log('console log antes do render');  
-        res.render("match.ejs", {id: user_find.id,name: user_find.name,picture: user_find.picture, age: user_find.age});
-        console.log('console log depois do render');
-
         //Reesscrever localstorage
         localStorage.clear();
         localStorage.setItem('users',JSON.stringify(users));
