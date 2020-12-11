@@ -3,5 +3,5 @@ as a project to the study of Business Administration and Informations System at 
 
 This app is free to use as it is uploaded to a public branch at github.com
 
-All copies should be referenced back to the link "github.com/pelolsen/project"
+All copies should be referenced back to the link "github.com/pelolsen/datingapp"
 
