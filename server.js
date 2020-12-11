@@ -5,6 +5,7 @@ if (typeof localStorage === "undefined" || localStorage === null) {
     var LocalStorage = require('node-localstorage').LocalStorage;
     localStorage = new LocalStorage('./database');
 }
+//require everything I need
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt')
@@ -12,10 +13,8 @@ const passport = require("passport")
 const flash = require("express-flash")
 const sessions = require("express-session")
 const methodOverride = require("method-override")
-const fs = require('fs')
 const multer = require('multer')
-const path = require("path")
-
+//Multer
 const storage = multer.diskStorage({
     destination: "./public/uploads/",
     filename: function(req, file, cb){
@@ -24,7 +23,7 @@ const storage = multer.diskStorage({
     }
 })
 const upload = multer({storage: storage}).single('UserFile');
-
+//Passport, require and use passport from passport config
 const initializePassport = require("./passport-config");
 const { use } = require('passport');
 initializePassport(
@@ -32,12 +31,13 @@ initializePassport(
     email => users.find(user => user.email === email),
     id => users.find(user => user.id === id)
 )
+//Users array
 const users =[]
-const users_json_obj = []
-
+//So I can use ejs to frontend
 app.set("view-engine", "ejs")
-
+//Make a public foldel so my css and pictures work
 app.use('/public', express.static('public'))
+//put the diffetent librarys at work
 app.use(express.urlencoded({extended: false}))
 app.use(flash())
 app.use(sessions({
@@ -49,11 +49,11 @@ app.use(passport.initialize())
 app.use(passport.session())
 app.use(methodOverride('_method'))
     
-
+//.get is mostly used to render the ejs files
 app.get("/", checkAuthenticated, (req,res)=> {
     res.render("index.ejs", { name: req.user.name, age: req.user.age, gender: req.user.gender, picture: req.user.picture, matches: req.user.matches})
 })
-
+//Check if the user already have been used
 function checkPossible(possibilities,id){
     for(i=0; i < possibilities.length; i++){
         if(possibilities[i]['id']===id){
@@ -63,18 +63,18 @@ function checkPossible(possibilities,id){
 
     return true
 }
-
+//Find possibilities - problem with if statment.
 function findUserposibilities(possibilities,usersfind,id1,usergender){    
 
     for(i=0; i < usersfind.length; i++){
         user_return = '';
-
+//it is like it does not see the !==
         if(usersfind[i]['id'] !== id1 && usersfind[i]['gender'] !== usergender && checkPossible(possibilities,usersfind[i]['id'])){
             console.log(usersfind[i]['gender']);
             console.log(usergender)
             possibilities.push(usersfind[i]['id']);
             user_return = usersfind[i];
-            break;
+            break; //break so it doesnt throw all of the users at one time, but one at a time
         }
     }
 
@@ -84,7 +84,6 @@ function findUserposibilities(possibilities,usersfind,id1,usergender){
    
 app.get("/match", checkAuthenticated, (req,res) =>{
     try{
-        //aqui creio que o correto seria usar tipo uma sessionStorage pra o usuario logado,mas esta funcionando assim não sei como kk.
         const id1=req.user.id
 
         console.log('req user id: '+id1);
@@ -93,12 +92,12 @@ app.get("/match", checkAuthenticated, (req,res) =>{
         const possibilities = req.user.possibilities
         const usersfind = JSON.parse(localStorage.getItem('users'));
         
-        //procura 1 usuario
+        //find the first user
         user_find = findUserposibilities(possibilities,usersfind,id1,usergender);
-        //renderiza a tela com o usuario encontrado
+        //rerender the screen with the found user
         res.render("match.ejs", {id: user_find.id,name: user_find.name,picture: user_find.picture, age: user_find.age});
 
-        //Reesscrever localstorage
+        //write to localStorage
         localStorage.clear();
         localStorage.setItem('users',JSON.stringify(users));
 
@@ -120,13 +119,14 @@ app.get("/updateprofile", checkAuthenticated, (req,res)=> {
     res.render("updateprofile.ejs")
 })
 
-
+//Login process - working fine
 app.post("/login", checkNotAuthenticated,  passport.authenticate('local', {
     successRedirect: "/",
     failureRedirect: "/login",
     failureFlash: true
 }))   
 
+//register process - working fine
 app.post("/register", checkNotAuthenticated, async (req,res) => {
     try{
         //encrypt the Uses password, so "we" cant see it
@@ -139,10 +139,10 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
             picture: './public/uploads/',
             email: req.body.email,
             password: hashedPassword,
-            possibilities: [],
-            likes: [],
-            dislikes: [],
-            matches: []
+            possibilities: [], //will be used to push the possibilities to
+            likes: [], //will be used to push the likes to
+            dislikes: [], //will be used to push the dislikes to
+            matches: [] //will be used to push the matches to
         }
         users.push(person)
    
@@ -159,11 +159,6 @@ app.post("/register", checkNotAuthenticated, async (req,res) => {
       //here it is save to the "localStorage"
       localStorage.setItem('users',JSON.stringify(users));
       //console.log(localStorage.getItem('users'));
-  
-      //pega os usuarios que é um json string e transforma de volta em array para ser manipulado
-      users_json_obj.push(JSON.parse(localStorage.getItem('users')));
-      //console.log(users_json_obj)
-      //console.log(users_json_obj[0]['id'])
 })
 
 //This is the post command for making the user uptade it's profile picture
@@ -171,9 +166,9 @@ app.post("/pictureuptade", checkAuthenticated, (req,res) =>{
     try{
         upload(req, res, (err) =>{
             if(err){
-                res.redirect('/register')
+                res.redirect('/')
             }else{
-                console.log(req.file);
+                //console.log(req.file);
                 const id1=req.user.id
                 const usersfind = JSON.parse(localStorage.getItem('users'));
                 const switchUserpic = (usersfind, id1) =>{
@@ -196,7 +191,7 @@ app.post("/pictureuptade", checkAuthenticated, (req,res) =>{
         res.redirect('/')
     }
 })
-
+// Delete User button
 app.post('/deleteuser', (req,res) => {
     try{
         const id1=req.user.id
@@ -204,26 +199,27 @@ app.post('/deleteuser', (req,res) => {
         const findUserid = (usersfind, id1) =>{
             for(i=0; i < usersfind.length; i++){
                 if(usersfind[i]['id'] === id1){
-                    usersfind.splice(i,1);
+                    usersfind.splice(i,1); //splice so we delete the user from the array
                     console.log(usersfind)
                     return usersfind
                 }
             }
         }
-        users.splice(0, users.length)
+        users.splice(0, users.length) //delete all user array so we can substitue it with the elements of userfind array
         users.push(...findUserid(usersfind,id1))
-        req.logOut()
+        req.logOut()//log the user out
         res.redirect("/login")
 
     }catch{
         res.redirect("/register")
     }
+    //update localStorage
     localStorage.clear();
     localStorage.setItem('users',JSON.stringify(users));
-    console.log(localStorage.getItem('users'));
+    //console.log(localStorage.getItem('users'));
     
 })
-
+//Uptade profine - no errors
 app.post("/updateprofile", checkAuthenticated, (req,res) =>{
     try{
         const id1=req.user.id
@@ -239,6 +235,7 @@ app.post("/updateprofile", checkAuthenticated, (req,res) =>{
                 }
             }
         }
+        //same procedure as before
         users.splice(0, users.length)
         users.push(...UptadeUser(usersfind,id1))
         localStorage.clear();
@@ -253,14 +250,14 @@ app.post("/updateprofile", checkAuthenticated, (req,res) =>{
 app.post('/match', checkAuthenticated, (req,res) =>{
     res.redirect('/match')
 })
-
+//test if it is a match
 function test_match(usersfind, id1, liked_id, matches){
     for(i=0; i<usersfind.length; i++){
         if(liked_id === usersfind[i]['id']){
             if(usersfind[i]['likes'].includes(id1)){
-                console.log('match');
+                //console.log('match');
                 matches.push(usersfind[i]['name']);
-                return true
+                return true //so we can use it later
             }
         }
     }
@@ -272,35 +269,29 @@ app.post('/like', checkAuthenticated, (req,res) => {
         liked_id = req.body.id;
         console.log('liked id: '+liked_id);  
 
-        //aqui creio que o correto seria usar tipo uma sessionStorage pra o usuario logado,mas esta funcionando assim não sei como kk.
         const id1 = req.user.id
         const usergender = req.user.gender
         const possibilities = req.user.possibilities
         const matches = req.user.matches
         const usersfind = JSON.parse(localStorage.getItem('users'));
-
-
-
         const userlike = req.user.likes;
+        
         userlike.push(liked_id);
-
-
-
-        //aqui vc iniciara uma funcao que fara o teste de Match!
+        //Use test match, and if its true, render the itsamatch page
        if(test_match(usersfind, id1, liked_id, matches)){
            res.render('itsamatch.ejs')
        } else{
-            //Aqui recomeçamos o processo de trazer a lista de usuarios
-            //procura 1 usuario
+            //Restart the process of finding a possibility
+            //Find a possible user
             user_find = findUserposibilities(possibilities,usersfind,id1,usergender);
-            //renderiza a tela com o usuario encontrado
-            console.log('console log antes do render');  
+            //re render the screen with the user
+            //console.log('b render');  
             res.render("match.ejs", {id: user_find.id,name: user_find.name,picture: user_find.picture, age: user_find.age});
-            console.log('console log depois do render');
+            //console.log('a render');
        }
         console.log(users)
         
-        //Reesscrever localstorage
+        //Uptade localStorage localstorage
         localStorage.clear();
         localStorage.setItem('users',JSON.stringify(users));
 
@@ -308,12 +299,12 @@ app.post('/like', checkAuthenticated, (req,res) => {
         res.redirect('/')
     }
 })
+//same proceduere as like, just with no test function
 app.post('/dislike', checkAuthenticated, (req,res) => {
     try{    
         disliked_id = req.body.id;
-        console.log('liked id: '+liked_id);  
+        //console.log('liked id: '+liked_id);  
 
-        //aqui creio que o correto seria usar tipo uma sessionStorage pra o usuario logado,mas esta funcionando assim não sei como kk.
         const id1 = req.user.id
         const usergender = req.user.gender
         const possibilities = req.user.possibilities
@@ -324,16 +315,13 @@ app.post('/dislike', checkAuthenticated, (req,res) => {
         const userdislike = req.user.dislikes;
         userdislike.push(disliked_id);
         console.log(users)
-        //Aqui recomeçamos o processo de trazer a lista de usuarios
-        //procura 1 usuario
+        //Restart the process of finding a possibility
+        //Find a possible user
         user_find = findUserposibilities(possibilities,usersfind,id1,usergender);
-        //renderiza a tela com o usuario encontrado
-        
-        console.log('console log antes do render');  
+        //rerender the screen with the user
         res.render("match.ejs", {id: user_find.id,name: user_find.name,picture: user_find.picture, age: user_find.age});
-        console.log('console log depois do render');
 
-        //Reesscrever localstorage
+        //update localStorage
         localStorage.clear();
         localStorage.setItem('users',JSON.stringify(users));
 
@@ -341,12 +329,12 @@ app.post('/dislike', checkAuthenticated, (req,res) => {
         res.redirect('/')
     }
 })
-
+//logout
 app.delete('/logout', async (req,res) => {
     req.logOut()
     res.redirect('/login')
 })
-
+//functions to check if user is authenticaded or not - no errors
 function checkAuthenticated(req, res, next){
     if (req.isAuthenticated()) {
         return next()
@@ -361,6 +349,6 @@ function checkNotAuthenticated(req, res, next) {
     next()
 }
 
-
+//Listen on port 3000... "localhost:3000/"
 app.listen(3000);
 
